@@ -2,9 +2,11 @@
 // tgBot  : имя Telegram-бота, например "planeta_znaniy_bot"
 // maxBot : имя MAX-бота (то, что стоит в ссылке https://max.ru/ИМЯ)
 window.CFG = {
-  tgBot: "planeta_znaniy1_bot",
-  maxBot: "se13549232_bot",
-  adminTg: "Znany_planet",
+  tgBot: "",
+  maxBot: "",
+  adminTg: "Znany_planet",          // логин администратора в Telegram (без @)
+  adminMaxUrl: "",                  // ссылка на MAX-профиль администратора: https://max.ru/u/...
+  playroomMaxUrl: "",               // ссылка на MAX-профиль «Островка» (номер на 7255): https://max.ru/u/...
   adminPhone: "+79163831598",
   adminPhoneText: "+7 (916) 383-15-98",
   playroomPhone: "+79858407255",
