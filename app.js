@@ -12,6 +12,14 @@ function maxNote(){return MX?'<p class="centered">Найдите нас в MAX �
 function ostrovBtn(cls){return(MX&&CFG.playroomMaxUrl)?`<a class="${cls}" href="#" data-ext="${CFG.playroomMaxUrl}">Написать в «Островок»</a>`:''}
 function reviewBtn(){let u=TG?(CFG.tgBot?`https://t.me/${CFG.tgBot}?start=reviews`:''):MX?(CFG.maxBot?`https://max.ru/${CFG.maxBot}?start=reviews`:''):(CFG.tgBot?`https://t.me/${CFG.tgBot}?start=reviews`:'');return u?`<a class="cta" href="#" data-ext="${u}">Оставить отзыв</a>`:`<p class="centered">Отзыв можно оставить в чате с ботом: отправьте команду /menu и выберите «Отзывы».</p>`}
 let DATA={items:[],ages:[]},page='home',history=[];
+let _lt='',_ls=0;
+function track(t){try{const A=TG||MX;if(!A||!A.initData)return;const n=Date.now();if(t===_lt&&n-_ls<3000)return;_lt=t;_ls=n;
+fetch(CFG.trackUrl||'/api/track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({p:TG?'tg':'mx',d:A.initData,t}),keepalive:true}).catch(()=>{})}catch(e){}}
+const PN={home:'Главная',ages:'Подбор по возрасту',catalog:'Все направления',creative:'Творчество',specialists:'Специалисты',events:'Праздники и мастер-классы',playroom:'Детский уголок «Островок»','playroom-gallery':'Фото «Островка»',schedule:'Расписание',reviews:'Отзывы',contacts:'Адрес и контакты'};
+function trackPage(p){let t=PN[p];if(!t&&p.startsWith('age:')){const a=DATA.ages[+p.split(':')[1]];t=a?'Подбор по возрасту → '+a.label:'Подбор по возрасту'}
+if(!t&&p.startsWith('item:')){const x=DATA.items.find(x=>x.id===+p.split(':')[1]);t=x?'Направление: '+x.title:'Направление'}if(t)track('Открыл(а): '+t)}
+document.addEventListener('click',e=>{const l=e.target.closest('a');if(!l)return;const h=l.getAttribute('href')||'';
+if(h.startsWith('tel:'))track('📞 Нажал(а) «Позвонить» '+h.slice(4));else if(l.dataset.ext){const u=l.dataset.ext;track(/start=reviews/.test(u)?'⭐ Нажал(а) «Оставить отзыв»':'💬 Нажал(а) «Написать администратору»')}});
 const main=document.getElementById('main');
 const palette=['yellow','green','blue','pink','lilac','mint'];
 const illustrations={'Вместе с мамой':'👩‍👧','ГКП':'🧒','Непоседы':'🏃','Осьминожки':'🐙','Умный карандаш':'✏️','Перед школой':'🎒','Продлённого дня':'🧑‍🤝‍🧑','Английский язык':'🗣️','Студия вокала':'🎤','Театральная студия':'🎭','Нейрокаллиграфия':'✍️','Олимпиадная математика':'🧮','Русский язык':'🔤','Островок':'🧸','Осознанное поколение':'🌱','Логопед':'💬','Психолог':'🌼','Нейропсихолог':'🧩','Мастер-классы':'🎨','День рождения':'🎂','Аренда костюмов':'🎭'};
@@ -20,8 +28,8 @@ const ageFiles=['age_1','age_2','age_3','age_4','age_5','age_6',null,null,null];
 function cardArt(x){if(x.title==='Островок')return '<img src="assets/ostrovok_avatar.webp" alt="">';let f=artFiles[x.title];return f?`<img src="assets/${f}.webp" alt="">`:`<span aria-hidden="true">${illustrations[x.title]||'🌟'}</span>`}
 const ageFaces=['👶','👶🏻','🧒','👧','👧🏻','🧑','👦','👧🏽','🧑🏻'];
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function go(p){if(page!==p)history.push(page);page=p;render();window.scrollTo(0,0)}
-function back(){if(history.length){page=history.pop();render()}else go('home')}
+function go(p){if(page!==p)history.push(page);page=p;render();window.scrollTo(0,0);trackPage(p)}
+function back(){if(history.length){page=history.pop();render();trackPage(page)}else go('home')}
 function head(t,sub=''){return `<div class="cloud"><h1>${esc(t)}</h1>${sub?`<p>${esc(sub)}</p>`:''}</div>`}
 function tile(t,em,c,p){return `<button class="tile ${c}" data-page="${p}"><span class="tile-art" aria-hidden="true">${em}</span><span class="tile-label">${esc(t)}</span></button>`}
 function itemCard(x,i=0){let art=cardArt(x);return `<button class="illustrated-card ${palette[i%6]}" data-item="${x.id}"><span class="illustrated-art">${art}</span><span class="illustrated-copy"><strong>${esc(x.title)}</strong><small>${esc(x.age||'Подробности внутри')}</small></span></button>`}
@@ -43,4 +51,4 @@ else if(page==='reviews'){s=head('Отзывы','Поделитесь впеча
 else if(page==='contacts'){s=head('Адрес и контакты','Мы рядом')+`<div class="section"><div class="address-card"><h2>📍 Основной центр</h2><p>с. Домодедово, ЖК «Домодедово Парк», бульвар Строителей, дом 5</p></div><div class="address-card"><h2>📍 Второй адрес</h2><p>ул. Современников, дом 6</p></div>${contactButtons()}<a class="soft" href="tel:+79858407255">Островок: +7 (985) 840-72-55</a></div>`}
 else if(page.startsWith('item:')){let x=DATA.items.find(x=>x.id===+page.split(':')[1]);if(x){let txt=esc(x.detail).replace(/\n/g,'<br>');s=head(x.title,x.age)+`<div class="section"><div class="detail-hero ${palette[x.id%6]}">${x.title==='Островок'?'<img src="assets/ostrovok_avatar.webp" alt="Аватарка Островка">':cardArt(x)}</div>${x.title==='Островок'?'<img class="photo" src="assets/playroom.webp" alt="Фотография Островка">':''}<div class="detail">${txt}</div>${contactButtons()}</div>`}}
 main.innerHTML=s;main.querySelectorAll('img').forEach(img=>{img.onerror=()=>{img.style.display='none';};});main.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>go(b.dataset.page));main.querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>go('item:'+b.dataset.item));let search=main.querySelector('#search');if(search)search.oninput=()=>{let q=search.value.toLowerCase();let arr=DATA.items.filter(x=>x.group==='programs'&&x.title.toLowerCase().includes(q));document.querySelector('#catalog-items').innerHTML=cards(arr);main.querySelectorAll('[data-item]').forEach(b=>b.onclick=()=>go('item:'+b.dataset.item))}}
-document.getElementById('back').onclick=back;document.getElementById('home').onclick=()=>go('home');document.querySelectorAll('.bottom button').forEach(b=>b.onclick=()=>go(b.dataset.page));fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;render()}).catch(()=>{main.innerHTML='<div class="section"><h2>Не удалось загрузить данные приложения</h2></div>'});
+document.getElementById('back').onclick=back;document.getElementById('home').onclick=()=>go('home');document.querySelectorAll('.bottom button').forEach(b=>b.onclick=()=>go(b.dataset.page));fetch('data.json').then(r=>r.json()).then(d=>{DATA=d;render();track('🚀 Открыл(а) мини-приложение')}).catch(()=>{main.innerHTML='<div class="section"><h2>Не удалось загрузить данные приложения</h2></div>'});
