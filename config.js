@@ -1,14 +1,15 @@
 // Настройки мини-приложения. Имена ботов пишутся БЕЗ @ и без https://
-// tgBot  : имя Telegram-бота, например "planeta_znaniy_bot"
-// maxBot : имя MAX-бота (то, что стоит в ссылке https://max.ru/ИМЯ)
+// tgBot  : имя Telegram-бота (для ссылки «Оставить отзыв» в боте), например "planeta_znaniy_bot"
+// maxBot : имя MAX-бота (то, что идёт после max.ru/ в ссылке на бота)
 window.CFG = {
   tgBot: "",
   maxBot: "",
-  adminTg: "Znany_planet",          // логин администратора в Telegram (без @)
-  adminMaxUrl: "",                  // ссылка на MAX-профиль администратора: https://max.ru/u/...
-  playroomMaxUrl: "",               // ссылка на MAX-профиль «Островка» (номер на 7255): https://max.ru/u/...
+  // Администратор
+  adminTg: "Znany_planet",
+  adminMaxUrl: "https://max.ru/u/f9LHodD0cOKQAEPkWSt9NKC6Y25zDUbFrjePJ8vpMer2fpiDkIuCjGaoEok",
   adminPhone: "+79163831598",
-  adminPhoneText: "+7 (916) 383-15-98",
-  playroomPhone: "+79858407255",
-  playroomPhoneText: "+7 (985) 840-72-55"
+  // Детский уголок «Островок»
+  playroomMaxUrl: "https://max.ru/u/f9LHodD0cOLHeNV78QjQFcamcSMZefjwDwXlVYGW6DwFBvXqn8njrybwc_g",
+  playroomTgUrl: "https://t.me/+79858407255",
+  playroomPhone: "+79858407255"
 };
