@@ -6,7 +6,9 @@ if(TG){try{TG.ready();TG.expand();TG.setHeaderColor('#fff8ef');TG.setBackgroundC
 function updateBack(){if(BB){try{page==='home'?BB.hide():BB.show()}catch(e){}}}
 if(BB){try{BB.onClick(()=>back())}catch(e){}}
 function openExt(url){if(TG){/^https:\/\/t\.me\//.test(url)?TG.openTelegramLink(url):TG.openLink(url)}else if(MX){/^https:\/\/max\.ru\//.test(url)?MX.openMaxLink(url):MX.openLink(url)}else window.open(url,'_blank','noopener')}
-document.addEventListener('click',e=>{const l=e.target.closest('a[data-ext]');if(l){e.preventDefault();openExt(l.dataset.ext)}});
+document.addEventListener('click',e=>{const l=e.target.closest('a[data-ext]');if(!l)return;
+if(TG||MX){e.preventDefault();openExt(l.dataset.ext)}
+else{l.href=l.dataset.ext;l.target='_blank';l.rel='noopener noreferrer'}});   // в обычном браузере открываем ссылку обычным способом
 function contactBtn(kind,cls){return `<button class="${cls}" data-contact="${kind}">${kind==='pr'?'💬 Связаться с детским уголком':'💬 Связаться с администратором'}</button>`}
 function showSheet(kind){const pr=kind==='pr';const phone=pr?CFG.playroomPhone:CFG.adminPhone;
 const mx=pr?CFG.playroomMaxUrl:CFG.adminMaxUrl;const tg=pr?CFG.playroomTgUrl:'https://t.me/'+(CFG.adminTg||'Znany_planet');
@@ -17,7 +19,7 @@ document.body.appendChild(d);d.onclick=e=>{if(e.target===d)closeSheet()};documen
 track(pr?'💬 Открыл(а) «Связаться с детским уголком»':'💬 Открыл(а) «Связаться с администратором»')}
 function closeSheet(){const s=document.getElementById('sheet');if(s)s.remove()}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-contact]');if(b){e.preventDefault();showSheet(b.dataset.contact)}});
-function reviewBtn(){return `<a class="cta" href="#" data-ext="${CFG.yandexReviews}">⭐ Оставить отзыв на Яндексе</a><p class="centered">Откроется страница «Планеты знаний» на Яндекс Картах.</p>`}
+function reviewBtn(){return `<a class="cta" href="#" data-ext="${CFG.yandexReviews.replace(/&/g,'&amp;')}">⭐ Оставить отзыв на Яндексе</a><p class="centered">Откроется страница «Планеты знаний» на Яндекс Картах.</p>`}
 let DATA={items:[],ages:[]},page='home',history=[];
 let _lt='',_ls=0;
 function vid(){try{let v=localStorage.getItem('pz_vid');if(!v){v=Math.random().toString(36).slice(2,8);localStorage.setItem('pz_vid',v)}return v}catch(e){return 'anon'}}
