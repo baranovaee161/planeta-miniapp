@@ -1,6 +1,6 @@
 const CFG=window.CFG||{};
 const TG=(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initData)?Telegram.WebApp:null;
-const MX=(!TG&&window.WebApp&&window.WebApp.initData!==undefined)?window.WebApp:null;
+const MX=(!TG&&window.WebApp&&window.WebApp.initData)?window.WebApp:null;   // MAX только если реально внутри MAX (есть данные запуска)
 const BB=(TG||MX)?(TG||MX).BackButton:null;
 if(TG){try{TG.ready();TG.expand();TG.setHeaderColor('#fff8ef');TG.setBackgroundColor('#fff8ef')}catch(e){}}
 function updateBack(){if(BB){try{page==='home'?BB.hide():BB.show()}catch(e){}}}
