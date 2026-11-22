@@ -17,7 +17,7 @@ document.body.appendChild(d);d.onclick=e=>{if(e.target===d)closeSheet()};documen
 track(pr?'💬 Открыл(а) «Связаться с детским уголком»':'💬 Открыл(а) «Связаться с администратором»')}
 function closeSheet(){const s=document.getElementById('sheet');if(s)s.remove()}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-contact]');if(b){e.preventDefault();showSheet(b.dataset.contact)}});
-function reviewBtn(){let u=TG?(CFG.tgBot?`https://t.me/${CFG.tgBot}?start=reviews`:''):MX?(CFG.maxBot?`https://max.ru/${CFG.maxBot}?start=reviews`:''):(CFG.tgBot?`https://t.me/${CFG.tgBot}?start=reviews`:'');return u?`<a class="cta" href="#" data-ext="${u}">Оставить отзыв</a>`:`<button class="cta" data-contact="adm">Написать отзыв администратору</button>`}
+function reviewBtn(){return `<a class="cta" href="#" data-ext="${CFG.yandexReviews}">⭐ Оставить отзыв на Яндексе</a><p class="centered">Откроется страница «Планеты знаний» на Яндекс Картах.</p>`}
 let DATA={items:[],ages:[]},page='home',history=[];
 let _lt='',_ls=0;
 function vid(){try{let v=localStorage.getItem('pz_vid');if(!v){v=Math.random().toString(36).slice(2,8);localStorage.setItem('pz_vid',v)}return v}catch(e){return 'anon'}}
@@ -29,7 +29,7 @@ function trackPage(p){let t=PN[p];if(!t&&p.startsWith('age:')){const a=DATA.ages
 if(!t&&p.startsWith('item:')){const x=DATA.items.find(x=>x.id===+p.split(':')[1]);t=x?'Направление: '+x.title:'Направление'}if(t)track('Открыл(а): '+t)}
 document.addEventListener('click',e=>{const l=e.target.closest('a');if(!l)return;const h=l.getAttribute('href')||'';
 if(h.startsWith('tel:'))track('📞 Нажал(а) «Позвонить» '+h.slice(4));else if(l.dataset.ext){const u=l.dataset.ext;const who=(u===CFG.playroomMaxUrl||u===CFG.playroomTgUrl)?'детскому уголку':'администратору';
-track(/start=reviews/.test(u)?'⭐ Нажал(а) «Оставить отзыв»':(/max\.ru/.test(u)?'💬 Выбрал(а) «Написать в MAX» ':'✈️ Выбрал(а) «Написать в Telegram» ')+(/start=reviews/.test(u)?'':who))}});
+track(/yandex\./.test(u)?'⭐ Нажал(а) «Оставить отзыв на Яндексе»':/start=reviews/.test(u)?'⭐ Нажал(а) «Оставить отзыв»':(/max\.ru/.test(u)?'💬 Выбрал(а) «Написать в MAX» ':'✈️ Выбрал(а) «Написать в Telegram» ')+(/start=reviews/.test(u)||/yandex\./.test(u)?'':who))}});
 const main=document.getElementById('main');
 const palette=['yellow','green','blue','pink','lilac','mint'];
 const illustrations={'Вместе с мамой':'👩‍👧','ГКП':'🧒','Непоседы':'🏃','Осьминожки':'🐙','Умный карандаш':'✏️','Перед школой':'🎒','Продлённого дня':'🧑‍🤝‍🧑','Английский язык':'🗣️','Студия вокала':'🎤','Театральная студия':'🎭','Нейрокаллиграфия':'✍️','Олимпиадная математика':'🧮','Русский язык':'🔤','Островок':'🧸','Осознанное поколение':'🌱','Логопед':'💬','Психолог':'🌼','Нейропсихолог':'🧩','Мастер-классы':'🎨','День рождения':'🎂','Аренда костюмов':'🎭'};
