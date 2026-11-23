@@ -2,6 +2,10 @@
 // tgBot  : имя Telegram-бота (для ссылки «Оставить отзыв» в боте), например "planeta_znaniy_bot"
 // maxBot : имя MAX-бота (то, что идёт после max.ru/ в ссылке на бота)
 window.CFG = {
+  // Время записи в «Островок»: первое и последнее время начала, шаг в минутах
+  slotFrom: "09:00",
+  slotTo: "20:00",
+  slotStep: 30,
   // Отзывы на Яндекс Картах
   yandexReviews: "https://yandex.ru/maps/org/planeta_znaniy/223309595231/reviews/?ll=37.703856%2C55.472709&tab=reviews&z=15",
   tgBot: "",
